@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Đăng Ký</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/SignupPage/style.css'%}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <section class="vh-100" style="background-color: #eee;">
+        <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-12 col-xl-11">
+                    <div class="card text-black" style="border-radius: 25px;">
+                        <div class="card-body p-md-5">
+                            <div class="row justify-content-center">
+                                <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+
+                                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Đăng ký tài khoản</p>
+
+                                    <form class="mx-1 mx-md-4" action="." method="post">
+                                        {% csrf_token %}
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fa fa-user me-3 fa-lg fa-fw fw-bold fs-3" aria-hidden="true"></i>
+                                            <div class="form-outline flex-fill mb-0 form-floating">
+                                                {{ form1.username }}
+                                                <label class="form-label" for="floatingInput">Tên hiển thị</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fa fa-envelope me-3 fa-lg fa-fw fw-bold fs-3" aria-hidden="true"></i>
+                                            <div class="form-outline flex-fill mb-0 form-floating">
+                                                {{ form1.email }}
+                                                <label class="form-label" for="floatingInput">Địa chỉ email</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fa fa-lock me-3 fa-lg fa-fw fw-bold fs-3" aria-hidden="true"></i>
+                                            <div class="form-outline flex-fill mb-0 form-floating">
+                                                {{ form1.password1 }}
+                                                <label class="form-label" for="floatingInput">Mật khẩu</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex flex-row align-items-center mb-4">
+                                            <i class="fa fa-key me-3 fa-lg fa-fw fw-bold fs-3" aria-hidden="true"></i>
+                                            <div class="form-outline flex-fill mb-0 form-floating">
+                                                {{ form1.password2 }}
+                                                <label class="form-label" for="floatingInput">Nhập lại mật khẩu</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-check d-flex justify-content-center mb-5">
+                                            <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c" />
+                                            <label class="form-check-label" for="form2Example3">
+                                            Tôi đồng ý với <a href="{% url 'termofservice' %}">Điều khoản dịch vụ</a> của trang web
+                                            </label>
+                                        </div>
+
+                                        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                            <button type="submit" class="btn btn-primary btn-lg">Đăng ký</button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                                <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+
+                                    <img src="https://raw.githubusercontent.com/NaughtyRavenn/Images/main/Main-project/signup.png" class="img-fluid" alt="Sample image">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

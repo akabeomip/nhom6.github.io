@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MeetingRoom - {{ room_name }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/RoomChat/style.css'%}">
+    <script src="{% static '/api.js' %}"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.20.0/dist/axios.min.js"></script>
+
+    
+</head>
+
+<body>
+    <header class="d-flex flex-wrap justify-content-end py-2 px-3 mb-2 bg-linear" style="background-color: rgb(107, 107, 153);">
+        <ul class="nav nav-pills col-12 col-md-auto mb-2 justify-content-center mb-md-0 text-end" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link bg-button active text-white fw-6 mx-md-1" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true"><i class="fa fa-commenting fs-5 " aria-hidden="true"></i></button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link bg-button text-white fw-6 mx-md-1" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false"><i class="fa fa-users fs-5" aria-hidden="true"></i></button>
+            </li>
+            <div class="dropdown">
+                <button class="nav-link bg-button text-white fw-6 mx-md-1" id="dropdownUser1" data-bs-toggle="dropdown" type="button" aria-expanded="false"><i class="fa fa-hand-paper-o fs-5" aria-hidden="true"></i></button>
+                <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="min-width: 0 !important;">
+                    <li>
+                        <li><a class="dropdown-item w3" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fa fa-heart" aria-hidden="true"></i></a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fa fa-smile-o" aria-hidden="true"></i></a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#"><i class="fa fa-hand-paper-o" aria-hidden="true"></i></a></li>
+                </ul>
+            </div>
+        </ul>
+        <div class="col-md-3 mx-4 text-end" style="width:auto" id="myDIV">
+            <button type="button" class="btn btn-outline-light me-2 cus-btn-1"><i class="fa fa-video-camera px-2 fs-5" aria-hidden="true"></i></button>
+            <button type="button" class="btn btn-outline-light me-2 cus-btn-1"><i class="fa fa-microphone px-2 fs-5" aria-hidden="true"></i></button>
+            <button type="button" class="btn btn-outline-light me-2 cus-btn-1"><i class="fa fa-caret-square-o-up px-2 fs-5" aria-hidden="true"></i></button>
+            <button type="button" class="btn btn-outline-light cus-btn-1 px-3"><i class="fa fa-sign-out fs-5" aria-hidden="true"></i><a class="text-decoration-none text-white" href={% url 'homepage' %}>Leave</a></button>
+        </div>
+        
+    </header>
+    <div class="flex-grow-1 px-2 py-2" style="min-height: calc(100% - 65px);height: calc(100% - 65px);;">
+        <div class="d-grid gap-3 cus-div-2" style="grid-template-columns: 5fr 1.5fr;height:100%">
+            <div class="border rounded-3 h-100">
+                
+                <p>Đây là màn hình stream</p>
+                <div id="streamingapi">
+                    <button class="button is-primary" v-if="!roomId" @click="createRoom" >
+                        Tạo Meeting
+                    </button>
+                    <button class="button is-primary" v-if="!roomId" @click="joinRoom" >
+                        Meeting
+                    </button>
+                    <button class="button is-primary" v-if="roomId" @click="publishVideo(true)" >
+                        Share Screen
+                    </button>
+                    <input type='text' id='roomId'>
+                    <input type='text' id='roomToken'>
+
+                </div>
+                <div id='videos' class='mx-auto'></div>
+            </div>
+            <div class="bg-linear border rounded-3 h-100 cus-div-1 cus-div-3">
+                <div class="tab-content h-100" id="pills-tabContent">
+                    <div class="tab-pane fade show active h-100" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" style=" position: relative;">
+                        <div class="chat-area" id="display" style="height:75vh; overflow-y: scroll;">
+                            
+                        </div>
+                        <form id="post-form">
+                            <div class="input-group mb-3 px-2" style=" position: absolute;bottom: 0;color: blanchedalmond;">
+                                {% csrf_token %}
+                                <input type="hidden" name="username" id="username" value="{{user}}" />
+                                <input type="hidden" name="room_id" id="room_id" value="{{room_name}}" />
+                                <input type="text" name="message" id="message" class="form-control" placeholder="Nhập ..." aria-label="Recipient's username" aria-describedby="button-addon2" />
+                                <button class="btn btn-outline-secondary cus-btn-2 " type="submit" id="button-addon2">Gửi</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                        hoho
+                    </div>
+                        
+
+
+                    <!--           test               -->
+                        <!--<div class="chat-area" id="display" style="height:75vh; overflow-y: scroll;">
+
+                            
+                        
+                        </div>
+                        <form id="post-form">
+                            <div class="input-group mb-3 px-2" style=" position: absolute;bottom: 0;color: blanchedalmond;">
+                                {% csrf_token %}
+                                <input type="hidden" name="username" id="username" value="{{user}}" />
+                                <input type="hidden" name="room_id" id="room_id" value="{{room_name}}" />
+                                <input type="text" name="message" id="message" class="form-control" placeholder="Nhập ..." aria-label="Recipient's username" aria-describedby="button-addon2" />
+                                <button class="btn btn-outline-secondary cus-btn-2 " type="submit" id="button-addon2">Gửi</button>
+                            </div>
+                        </form>-->
+            
+                        <!-- <div class="input-group mb-3" style="position: absolute;bottom: -5px;width: 22%;margin:0">
+                            <input type="text" class="form-control" placeholder="Nhập ..." aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <button class="btn cus-btn-1" type="button" id="button-addon2">Gửi</button>
+                        </div> -->
+                        
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js " integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM " crossorigin="anonymous "></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js " integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p " crossorigin="anonymous "></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js " integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF " crossorigin="anonymous "></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js "></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <script type="text/javascript"></script>
+    <script type="text/javascript" src="https://cdn.stringee.com/sdk/web/latest/stringee-web-sdk.min.js"></script>
+    <script src="https://cdn.stringee.com/sdk/web/2.2.1/stringee-web-sdk.min.js"></script>
+    <script>
+        const VideoContainer = document.getElementById('videos');
+        const vm = new Vue ({
+            el: '#streamingapi',
+            data: {
+                userToken: '',
+                roomToken: '',
+                roomId: '',
+                room: undefined,
+                client: undefined
+            },
+            mounted() {
+                api.setRestToken()
+            },
+            methods: {
+                login: function() {
+                    return new Promise(async(resolve) => {
+                        const userId = document.getElementById("username").value
+                        const userToken = await api.getUserToken(userId)
+                        this.userToken = userToken
+    
+                        //tạo client 
+                        const client = new StringeeClient();
+
+                        client.on('authen', (result) => {
+                            console.log('on authen', result)
+                            resolve(result)
+                        })
+                        client.connect(userToken);
+
+                        this.client = client;
+                    });   
+                },
+                publishVideo: async function(shareScreen = false) {
+                    const localTrack = await StringeeVideo.createLocalVideoTrack(
+                        this.client,{
+                        audio: true,
+                        video: true,
+                        screen: shareScreen,
+                        videoDimensions: { width: 600, height: 400 }
+                    })
+                    const track = localTrack.attach();
+                    this.addVideo(track)
+
+                    const roomData = await StringeeVideo.joinRoom(
+                        this.client,
+                        this.roomToken
+                    );
+                    const room = roomData.room;
+                    console.log({roomData, room});
+
+                    this.room = room;
+                    room.publish(localTrack);
+                    room.clearAllOnMethos();
+                    room.on("addtrack", async(event) => {
+                        const trackInfo = event.info.track;
+                        if (trackInfo.serverId === localTrack.serverId) {
+                            return;
+                        }
+                        this.subscribeTrack(trackInfo)
+                        //this.addVideo(semitrack)
+                    });
+                    room.on('removetrack', (event) => {
+                        if(!event.semitrack) {
+                            return 
+                        }
+                        const elements = event.semitrack.detach();
+                        elements.forEach(element => element.remove()); 
+                    })
+                    roomData.listTracksInfo.forEach(trackInfo => this.subscribeTrack(trackInfo))
+
+                    room.publish(localTrack);
+                },
+                createRoom: async function() {
+                    //console.log('hahahaha')
+                    const room = await api.createRoom()
+                    const roomToken = await api.getRoomToken(room.roomId)
+
+                    this.roomId = room.roomId
+                    this.roomToken = roomToken
+                    document.getElementById("roomId").value=this.roomId
+                    document.getElementById("roomToken").value=this.roomToken
+                    //login 
+                    //await this.login();
+                    await this.login();
+
+                    await this.publishVideo();
+                },
+                joinRoom: async function() {
+                    //console.log('hihihihihi')
+
+                    //const roomId = document.getElementById("roomId").value
+                    //if (!roomId) {
+                    //    return
+                    //}
+
+                    //const roomToken = await api.getRoomToken(roomId)
+                    //this.roomId = roomId
+                    //this.roomToken = roomToken
+
+                    //await this.login();
+                    //await this.publishVideo();
+
+                    const roomId = prompt('Room ID');
+                    if (!roomId){
+                        return;
+                    }
+
+                    const roomToken = await api.getRoomToken(roomId)
+                    this.roomId = roomId
+                    this.roomToken = roomToken
+                    document.getElementById("roomId").value=this.roomId
+                    document.getElementById("roomToken").value=this.roomToken
+
+                    await this.login();
+
+                    await this.publishVideo();
+                },
+                addVideo: function(video) {
+                    video.setAttribute("controls", "true");
+                    video.setAttribute("playsinline", "true");
+                    VideoContainer.appendChild(video);
+                },
+                subscribeTrack: async function(trackInfo) {
+                    const semitrack = await this.room.subscribe(trackInfo.serverId)
+                        semitrack.on('ready', () => {
+                            const ele = semitrack.attach();
+                            VideoContainer.appendChild(ele);
+                        });
+                }
+            }
+        })
+        
+    </script>
+</body>
+    
+    <script type="text/javascript">
+        $(document).on('submit','#post-form',function(e){
+            e.preventDefault();
+    
+            $.ajax({
+                type:'POST',
+                url:'/send',
+                data:{
+                    username:$('#username').val(),
+                    room_id:$('#room_id').val(),
+                    message:$('#message').val(),
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function(data){
+                    //alert(data)
+                }
+            });
+            document.getElementById('message').value = ''
+            });
+    </script>
+
+    <script>
+        $(document).ready(function(){
+        
+        setInterval(function(){
+            $.ajax({
+                type: 'GET',
+                url : "/getMessages/{{ room_name }}/",
+                success: function(response){
+                    //console.log(response);
+                    $("#display").empty();
+                    for (var key in response.messages)
+                    {
+                        var temp="<div class='card mx-auto my-3' style='margin-right: 10px; width: 95%;'><div class='card-body' ><h5 class='card-title'>"+response.messages[key].messenger+"</h5><p class='card-text'>"+response.messages[key].noidung+"</p></div></div>";
+                        $("#display").append(temp);
+                    }
+                },
+                error: function(response){
+                    alert('An error occured')
+                }
+            });
+        },1000);
+        })
+        </script>
+
+    <script>
+        var header = document.getElementById("myDIV");
+        var btns = header.getElementsByClassName("cus-btn-1");
+        for (var i = 0; i < btns.length; i++) {
+            btns[i].addEventListener("click", function() {
+                if (this.document.getElementsByClassName("active"))
+                    this.className = this.className.replace("active");
+                // var current = document.getElementsByClassName("active");
+                // current[0].className = current[0].className.replace(" active", "");
+                else
+                    this.className += " active";
+            });
+        }
+    </script>
+    
+
+
+</html>

@@ -1,0 +1,48 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+.bg-linear {
+    background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+    /* background: white !important; */
+}
+
+.cus-btn-1:focus {
+    box-shadow: none !important;
+}
+
+.cus-btn-1:active {
+    box-shadow: none !important;
+}
+
+.cus-btn-2 {
+    border-color: #d8363a !important;
+    background-color: transparent !important;
+    color: #d8363a !important;
+}
+
+.cus-btn-2:hover {
+    box-shadow: 2px 2px 5px rgb(214, 214, 214);
+    color: white !important;
+    background-color: #d8363a !important;
+}
+
+.cus-btn-2:hover a {
+    color: white;
+}
+
+.cus-btn-2 a {
+    color: #d8363a;
+}
+
+.cus-div-1 {
+    padding: 0;
+}
+
+.bg-button.active {
+    background: linear-gradient(to right, #fd0db5, #d836d8) !important;
+}
