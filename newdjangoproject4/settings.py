@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #
     'nguoidung.apps.NguoidungConfig',
-    #https - SSL
-    'sslserver',
+    # #https - SSL
+    # 'sslserver',
 ]
 
 STATIC_URL = 'static/';
