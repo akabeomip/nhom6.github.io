@@ -1,0 +1,52 @@
+html,
+body {
+    height: 100%;
+}
+
+.haha {
+    background-color: blueviolet;
+}
+
+.bg-linear {
+    background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+    /* background: white !important; */
+}
+
+.bg-button.active {
+    background: linear-gradient(to right, #fd0db5, #d836d8) !important;
+}
+
+.cus-btn-1:hover {
+    background: linear-gradient(to right, #fd0db5, #d836d8);
+}
+
+.cus-btn-1.active {
+    background-color: blue;
+}.cus-btn-2 {
+    border-color: #510086 !important;
+    background-color: #510086 !important;
+    color: white !important;
+}
+
+.cus-btn-2:hover {
+    box-shadow: 2px 2px 5px rgb(214, 214, 214);
+    color: white !important;
+    background-color: blueviolet !important;
+}
+
+.cus-btn-2:hover a {
+    color: white;
+}
+
+.cus-btn-2 a {
+    color: #d8363a;
+}
+
+@media only screen and (max-width: 576px){
+    .cus-div-2{
+        grid-template-columns: 100% 0;
+    }
+    .cus-div-3{
+        display: none;
+    }
+}

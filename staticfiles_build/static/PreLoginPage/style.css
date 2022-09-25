@@ -1,0 +1,48 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.bg-linear {
+    background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+}
+
+.bg-button.active {
+    background: linear-gradient(to right, #fd0db5, #d836d8) !important;
+}
+
+.cus-btn-1:hover {
+    background: linear-gradient(to right, #fd0db5, #d836d8);
+}
+
+.cus-btn-2 {
+    border-color: #d8363a !important;
+    background-color: transparent !important;
+    font-size: 1rem !important;
+}
+
+.cus-btn-2:hover {
+    box-shadow: 2px 2px 5px rgb(214, 214, 214);
+    color: white;
+    background-color: #d8363a !important;
+}
+
+.cus-btn-2:hover a {
+    color: white;
+}
+
+.cus-btn-2 a {
+    color: #d8363a;
+}
+
+.fw-6 {
+    font-weight: 600;
+}
+
+.haha {
+    background-color: blue;
+}
