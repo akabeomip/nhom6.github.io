@@ -15,7 +15,7 @@ class RoomChat(models.Model):
     def __str__(self):
         return self.RoomID
     
-    class meta:
+    class meta: 
         verbose_name_plural = 'RoomChats'
 
 class thongtinnguoidung(models.Model):
